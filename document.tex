@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[siunitx]{circuitikz}
+\usepackage[left=2.5cm,top=3cm,right=2.5cm,bottom=2.5cm]{geometry}
+
+\begin{document}
+	\begin{center}
+		\begin{circuitikz}
+			
+			% Creación de componentes
+			\draw (0,0) to[sV, l=$V_s$] (0,4) to[R, l=\mbox{$R_s=50\ \Omega$}] (4,4) to[C, l=$C_1$,a=$1\ \mu F$,-*] (8,4) to[R] (8,0) -- (0,0);
+			\draw (8,4) -- (9.6,4);
+			\draw (10,4) node[npn] (npn1) {};
+			\draw (npn1.E) -- (10,0) -- (8,0);
+			\draw (npn1.C) to[R] (10,8) -- (8,8) to[R] (8,4.6) -- (8,4);
+			\draw (10,5) to[C, l=$C_2$, a=$10\ \mu F$] (15,5) to[R,*-] (15,0) -- (10,0);
+			\draw (9,8) to[battery] (9,10) -- (8,10) node[ground] {};
+			\draw (10,0) to [short,*-] (10,0) node[ground] {};
+			\draw (15,5) to[short, -*, l=\mbox{$V_{out}$}] (16,5);
+			
+			
+			% Creaación de etiquetas
+			\draw (8,2) node[above=2mm, left=2mm]{$R_2$};\draw (8,2) node[below=2mm, left=2mm]{$2.2\ k\Omega$}; 
+			\draw (8,6.3) node[above=2mm, left=2mm]{$R_1$};\draw (8,6.3) node[below=2mm, left=2mm]{$15\ k\Omega$}; 
+			\draw (10,6.3) node[above=2mm, right=2mm]{$R_c$};\draw (10,6.3) node[below=2mm, right=2mm]{$1\ k\Omega$};
+			\draw (15,2.5) node[above=2mm, right=2mm]{$R_L$};\draw (15,2.5) node[below=2mm, right=2mm]{$1\ k\Omega$};
+			\draw (10,4) node[right=0mm]{2N2222A};
+			\draw (9,9) node[above=2mm, right=4mm]{$V_1$};\draw (9,9) node[below=2mm, right=4mm]{$10\ V$};
+			\draw (0,2) node[above=6mm, right= 0mm]{$+$};\draw (0,2) node[below=6mm, right=0mm]{$-$};
+		\end{circuitikz}
+	\end{center}
+\end{document}
+	
+	
+	% NOTAS
+	
+	% Antes de nada, no te asustes, es más sencillo de lo que parece.
+	
+	% Lo primero de todo es cargar el paquete que nos permitirá crear el entorno en el que crearemos los circuitos. \usepackage[siunitx]{circuitikz}
+	
+	% Cabe destacar que se puede modificar absolutamente todo a nuestro gusto. Es decir, que si queremos cambiar un punto negro por uno blanco, poner las tensiones de cada componente, las corrientes, anotaciones, dibujos, flechas... se puede hacer. Hay que mirar en el pdf manual de Circuitikz cuál es el comando y utilizarlo.
+	
+	% Una vez hemos cargado el entono circuitikz, es importante poner los draw, ya que si no, no nos dibujará el circuito.
+	
+	% La dinámica es la siguiente. Defines un punto de inicio, que será el (0,0), y a partir de aquí, has creado un sistema de coordenadas donde x e y son distancias en centímetros. 
+	
+	% Miremos la primera línea: \draw (0,0) to[sV, l=$V_s$] (0,4) to[R, l=\mbox{$R_s=50\ \Omega$}] (4,4) to[C, l=$C_1$,a=$1\ \mu F$,-*] (8,4) to[R] (8,0) -- (0,0);
+	
+	% Estamos diciendo, empieza en (0,0), dibuja una fuente sinusoidal, y acaba en (0,4), dibuja una resitencia y acada en (4,4), dibuja un condensador y acaba en (8,4), dibuja una resistencia y acaba en (8,0) y por último, dibuja una linea hasta el inicio.
+	
+	% Como puedes ver, es bastante intuitivo, y con eso, ya podríamos dibujar circuitos sencillos.
+	
+	% Dentro de los corchetes, pones el elemento que quieres, y después hay muchos comandos. l es label, etiqueta, es decir, el nomnbre del componente, a es anotación, y la pone al lado contrario de la etiqueta. Hay otros como rotate=90 si por ejemplo quieres rotar el componente, pero le vamos a dar uso casi exlusivamente a l y a a. (explico lo demás más abajo). Por otra parte, si pones -*, te dibujará el componente y luego un punto. Si pones *-, primero el punto y luego el componente, y si pones *-*, dibujará un punto a ambos lados del componente.
+	
+	% Cada vez que quieras cambiar de nodo, cierras el draw y empiezas otro. Me parece que no es necesario, pero así me entero mejor. 
+	
+	% Ahora bien, si quieres poner el transistor, pensarás que pones to[transistor] y arreando. Pues no. Eso sólo vale para elementos bipolares. A partir de los tripolos, hay que crear un nodo. Un nodo es un punto invisible que defines en una coordenada y en el que dibujas algo. Echemos un vistazo a la línea del transistor: \draw (10,4) node[npn] (npn1) {};
+	
+	% Viene a decir, dibújame en (10,4) un transistor npn, que voy a llamar npn1. Entre corchetes iría el nombre del nodo, en este caso 2N2222A, pero se queda en una posición más elevada que no me gustaba, por eso está vacío. El nombre lo he puesto de una forma que explicaré más abajo.
+	
+	% Ahora puedes usar las patillas del transistor como si fueran puntos: \draw (npn1.E) -- (10,0) -- (8,0); Viene a decir, empieza en el emisor del transitor npn1, dibuja una linea hasta (10,0) y otra hasta (8,0).	
+	
+	% En el transitor, las patillas del colector y el emisor están a una distancia horizontal 0.6 de la base. Esto es importante porque cuando pones el transistor, te lo pone a la altura de las patillas emisor y colector, es decir, que verías una línea que se mete por la base. Para evitarlo, si quieres poner el transistor en el punto (10,4) como es el caso, significa que la línea horizontal de la izquierda la tienes que poner para que acabe 0.6 antes de 10. La distancia vertical también es 0.6 y...
+	
+	% ... Si te das cuenta, latex siempre pone el componente en la mitad de la línea, pero si te fijas, la resistencia del colector está paralela a una que no está en la mitad. Para ponerla en la mitad simplemtne es porque esa línea está formada por dos líneas, es decir, le he quitado 0.6 de distancia para que la que me quede sea igual a la del colector y por tanto, me ponga la resisencia en paralelo a la otra: \draw (npn1.C) to[R] (10,8) -- (8,8) to[R] (8,4.6) -- (8,4);
+	
+	% Pues con esto, ya sabes dibujar cualquier circuito. Tendrás que mirar en el pdf cómo se meten los demás componentes y demás, pero todo lo visto aquí es extrapolable. Lo que viene a continuación en como dejar bonito el circuito.
+	
+	% Para poner las etiquetas tenemos tres opciones:
+		% a) Ponemos la etiqueta l, y una anotación a. Se pondrán una a cada lado del componente. Ejemplo: l=$C_1$,a=$1\ \mu F$
+		% b) Si tenemos espacio horizontal, poner un mbox (cuadro de matemáticas) y meterlo todo dentro. Se pondrá a la derecha del componente (en la dirección de creación). Ejemplo: l=\mbox{$R_s=50\ \Omega$}
+		% c) Si tenemos el componente verticalmente, pero no tenemos espacio a ambos lados, lo podemos poner todo en uno creando nodos. Creamos un nodo en el punto donde está situado el componente y le decimos cuánto nos queremos mover a los lados en milimetros y ponemos la etiqueta. podríamos poner tantas como quisiéramos, si tuviéramos espacio. Ejemplo: \draw (8,2) node[above=2mm, left=2mm]{$R_2$}
+	
+	% El short añade un pequeño cable, ideal para salidas o entradas.
+	
+	% No he encontrado la forma de que la fuente sinusoidal me mnuestre la polaridad, así que he creado nodos. Te sirven para poner cualquier tipo de anotación en cualquier punto que quieras del circuito. 
+	
+	% Y creo que con eso es todo. Si tienes cualquier duda, pregúntame :)
